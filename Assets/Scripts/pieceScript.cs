@@ -7,6 +7,7 @@ public class pieceScript : MonoBehaviour {
     public Rigidbody rb;
 
     public int index;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -16,7 +17,8 @@ public class pieceScript : MonoBehaviour {
 	void Update () {
 		
 	}
-    void setIndex(int set)
+
+    public void setIndex(int set)
     {
         index = set;
     }

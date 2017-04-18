@@ -4,8 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour
-{
+public class GameController : MonoBehaviour {
 
     public int[,] boardState = new int[8, 8];
     public GameObject[] rowList;
@@ -39,10 +38,10 @@ public class GameController : MonoBehaviour
         board = GetComponent<gameBoard>();
         pScript = GetComponent<pieceScript>();
         pieceArray = new GameObject[8, 8];
-        boardState = new int[8, 8]{ { 0, 0, 0, 0, 0, 0, 0, 0},
-                                    { 0, 0, 0, 0, 0, 0, 0, 0},
-                                    { 0, 0, 0, 0, 0, 0, 0, 0},
-                                    { 0, 0, 0, 1, 2, 0, 0, 0},
+        boardState = new int [8,8]{ { 0, 0, 0, 0, 0, 0, 0, 0},
+                                    { 0, 0, 0, 0, 0, 0, 0, 0}, 
+                                    { 0, 0, 0, 0, 0, 0, 0, 0}, 
+                                    { 0, 0, 0, 1, 2, 0, 0, 0}, 
                                     { 0, 0, 0, 2, 1, 0, 0, 0},
                                     { 0, 0, 0, 0, 0, 0, 0, 0},
                                     { 0, 0, 0, 0, 0, 0, 0, 0},
@@ -83,7 +82,7 @@ public class GameController : MonoBehaviour
 
                 // Matrix index
                 x = (int)Mathf.Floor(hit.point.x);
-                y = (int)Mathf.Floor(hit.point.z) * -1 + 7;
+                y = (int)Mathf.Floor(hit.point.z)*-1+7;
 
 
 
@@ -102,7 +101,7 @@ public class GameController : MonoBehaviour
                             playerSide = 2;
                             oppositeSide = 1;
                         }
-
+                        
                     }
                     else
                     {
@@ -110,7 +109,7 @@ public class GameController : MonoBehaviour
                         {
                             insertPoint = new Vector3(i, 2, j);
                             boardState[x, y] = playerSide;
-
+                            
                             pieceArray[x, y] = Instantiate(piece, insertPoint, Quaternion.Euler(180, 0, 0));
 
                             playerSide = 1;
@@ -123,8 +122,8 @@ public class GameController : MonoBehaviour
                     Debug.Log("Invalid Move");
                 }
             }
-
-
+            
+            
         }
     }
 
@@ -136,7 +135,7 @@ public class GameController : MonoBehaviour
 
         if (boardState[x - 1, y + 1] == opSide && x > 1 && y < 6) // Bottom Left
         {
-            march = marchLength(x, y, 0);
+            march = marchLength(x, y, 0);            
             for (int a = 1; a <= march; a++)
             {
                 affectedPieces.Add(pieceArray[x - a, y - a]);
@@ -168,7 +167,7 @@ public class GameController : MonoBehaviour
 
         if (boardState[x, y - 1] == opSide && y > 1) // Down
         {
-
+            
 
             for (int a = 1; a < y; a++)
             {
@@ -232,7 +231,7 @@ public class GameController : MonoBehaviour
             for (int a = 1; a <= x; a++)
             {
                 affectedPieces.Add(pieceArray[x - 1, y]);
-                if (boardState[x - a, y] == side)
+                if (boardState[x-a, y] == side)
                 {
                     affectedPieces.Remove(pieceArray[x - 1, y]);
                     valid = true;
@@ -254,7 +253,7 @@ public class GameController : MonoBehaviour
 
         if (boardState[x + 1, y] == opSide && x < 6) // Right
         {
-            for (int a = 1; a <= 7 - x; a++)
+            for (int a = 1; a <= 7-x; a++)
             {
                 affectedPieces.Add(pieceArray[x + 1, y]);
                 if (boardState[x + a, y] == side)
