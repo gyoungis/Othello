@@ -46,10 +46,11 @@ public class GameController : MonoBehaviour {
                                     { 0, 0, 0, 0, 0, 0, 0, 0},
                                     { 0, 0, 0, 0, 0, 0, 0, 0},
                                     { 0, 0, 0, 0, 0, 0, 0, 0} };
-        Instantiate(piece, new Vector3(3f, 2f, 4f), Quaternion.identity);
-        Instantiate(piece, new Vector3(4f, 2f, 3f), Quaternion.identity);
-        Instantiate(piece, new Vector3(4f, 2f, 4f), Quaternion.Euler(180, 0, 0));
-        Instantiate(piece, new Vector3(3f, 2f, 3f), Quaternion.Euler(180, 0, 0));
+        pieceArray[3,3] = Instantiate(piece, new Vector3(3f, 2f, 4f), Quaternion.identity);
+        pieceArray[4,4] = Instantiate(piece, new Vector3(4f, 2f, 3f), Quaternion.identity);
+        pieceArray[4,3] = Instantiate(piece, new Vector3(4f, 2f, 4f), Quaternion.Euler(180, 0, 0));
+        pieceArray[3,4] = Instantiate(piece, new Vector3(3f, 2f, 3f), Quaternion.Euler(180, 0, 0));
+        Debug.Log(pieceArray[3, 4]);
         playerSide = 1;
         oppositeSide = 2;
     }
@@ -133,12 +134,12 @@ public class GameController : MonoBehaviour {
         bool valid = true;
         int march;
 
-        if (boardState[x - 1, y + 1] == opSide && x > 1 && y < 6) // Bottom Left
+        if (boardState[x - 1, y + 1] == opSide && x > 1 && y < 6) // Bottom Left ------------------------
         {
             march = marchLength(x, y, 0);            
             for (int a = 1; a <= march; a++)
             {
-                affectedPieces.Add(pieceArray[x - a, y - a]);
+                affectedPieces.Add(pieceArray[x - a, y + a]);
                 if (boardState[x - a, y + a] == side) //Same Color
                 {
                     affectedPieces.Remove(pieceArray[x - a, y + a]);
@@ -165,16 +166,19 @@ public class GameController : MonoBehaviour {
 
 
 
-        if (boardState[x, y - 1] == opSide && y > 1) // Down
+        if (boardState[x, y + 1] == opSide && y < 6) // Down --------------------------------------
         {
             
 
-            for (int a = 1; a < y; a++)
+            for (int a = 1; a < 7-y; a++)
             {
-                affectedPieces.Add(pieceArray[x, y - a]);
-                if (boardState[x, y - a] == side) //Same Color
+                Debug.Log(x);
+                Debug.Log(y+a);
+                affectedPieces.Add(pieceArray[x, y + a]);
+                
+                if (boardState[x, y + a] == side) //Same Color
                 {
-                    affectedPieces.Remove(pieceArray[x - a, y - a]);
+                    affectedPieces.Remove(pieceArray[x, y + a]);
                     valid = true;
                     for (int c = 0; c < affectedPieces.Count; c++)
                     {
@@ -185,7 +189,7 @@ public class GameController : MonoBehaviour {
                 }
 
 
-                if (boardState[x, y - a] == 0) // Empty or off board
+                if (boardState[x, y + a] == 0) // Empty or off board
                 {
                     valid = false;
                     affectedPieces.Clear();
@@ -196,16 +200,16 @@ public class GameController : MonoBehaviour {
         }
 
 
-        if (boardState[x + 1, y - 1] == opSide && x < 6 && y > 1) // Bottom Right
+        if (boardState[x + 1, y + 1] == opSide && x < 6 && y < 6) // Bottom Right -----------------------------------
         {
             march = marchLength(x, y, 1);
 
             for (int a = 1; a <= march; a++)
             {
-                affectedPieces.Add(pieceArray[x - a, y - a]);
-                if (boardState[x + a, y - a] == side) //Same Color
+                affectedPieces.Add(pieceArray[x + a, y + a]);
+                if (boardState[x + a, y + a] == side) //Same Color
                 {
-                    affectedPieces.Remove(pieceArray[x + a, y - a]);
+                    affectedPieces.Remove(pieceArray[x + a, y + a]);
                     valid = true;
                     for (int c = 0; c < affectedPieces.Count; c++)
                     {
@@ -216,7 +220,7 @@ public class GameController : MonoBehaviour {
                 }
 
 
-                if (boardState[x + a, y - a] == 0) // Empty or off board
+                if (boardState[x + a, y + a] == 0) // Empty or off board
                 {
                     valid = false;
                     affectedPieces.Clear();
@@ -226,7 +230,7 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        if (boardState[x - 1, y] == opSide && x > 1) // Left
+        if (boardState[x - 1, y] == opSide && x > 1) // Left ----------------------------------
         {
             for (int a = 1; a <= x; a++)
             {
@@ -251,7 +255,7 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        if (boardState[x + 1, y] == opSide && x < 6) // Right
+        if (boardState[x + 1, y] == opSide && x < 6) // Right -----------------------------------------
         {
             for (int a = 1; a <= 7-x; a++)
             {
@@ -276,14 +280,17 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        if (boardState[x + 1, y] == opSide && x < 6) // Right
+        
+
+        if (boardState[x - 1, y - 1] == opSide && x > 1 && y > 1) // Top Left --------------------------------------
         {
-            for (int a = 1; a <= 7 - x; a++)
+            march = marchLength(x, y, 2);
+            for (int a = 1; a <= march; a++)
             {
-                affectedPieces.Add(pieceArray[x + 1, y]);
-                if (boardState[x + a, y] == side)
+                affectedPieces.Add(pieceArray[x - a, y - a]);
+                if (boardState[x - a, y - a] == side)
                 {
-                    affectedPieces.Remove(pieceArray[x + a, y]);
+                    affectedPieces.Remove(pieceArray[x - a, y - a]);
                     valid = true;
                     for (int c = 0; c < affectedPieces.Count; c++)
                     {
@@ -292,7 +299,59 @@ public class GameController : MonoBehaviour {
                     affectedPieces.Clear();
                     break;
                 }
-                if (boardState[x + a, y] == 0) // Empty or off board
+                if (boardState[x - a, y - a] == 0) // Empty or off board
+                {
+                    valid = false;
+                    affectedPieces.Clear();
+                    break;
+                }
+            }
+        }
+
+        if (boardState[x, y - 1] == opSide && y > 1) // Up --------------------------------------
+        {
+            
+            for (int a = 1; a <= y; a++)
+            {
+                affectedPieces.Add(pieceArray[x, y - a]);
+                if (boardState[x, y - a] == side)
+                {
+                    affectedPieces.Remove(pieceArray[x, y - a]);
+                    valid = true;
+                    for (int c = 0; c < affectedPieces.Count; c++)
+                    {
+                        affectedPieces[c].transform.Rotate(0, 0, 180, Space.World);
+                    }
+                    affectedPieces.Clear();
+                    break;
+                }
+                if (boardState[x, y - a] == 0) // Empty or off board
+                {
+                    valid = false;
+                    affectedPieces.Clear();
+                    break;
+                }
+            }
+        }
+
+        if (boardState[x + 1, y - 1] == opSide && x > 1 && y > 1) // Top Right --------------------------------------
+        {
+            march = marchLength(x, y, 3);
+            for (int a = 1; a <= march; a++)
+            {
+                affectedPieces.Add(pieceArray[x + a, y - a]);
+                if (boardState[x + a, y - a] == side)
+                {
+                    affectedPieces.Remove(pieceArray[x + a, y - a]);
+                    valid = true;
+                    for (int c = 0; c < affectedPieces.Count; c++)
+                    {
+                        affectedPieces[c].transform.Rotate(0, 0, 180, Space.World);
+                    }
+                    affectedPieces.Clear();
+                    break;
+                }
+                if (boardState[x + a, y - a] == 0) // Empty or off board
                 {
                     valid = false;
                     affectedPieces.Clear();
